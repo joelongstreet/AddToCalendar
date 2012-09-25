@@ -19,14 +19,15 @@ app.post '/', (req, res) ->
     
     files = []
 
+    res.send({"complete" : "true"})
     for item in req.body
-        create_file _i, item, (file_path) ->
+
+        create_file _i, item, (file_path, index) ->
             files.push
                 filePath : file_path
 
-            if _i == req.body.length
+            if index == req.body.length - 1
                 send_mail(files)
-                res.send({"complete" : "true"})
 
 
 
@@ -43,7 +44,7 @@ create_file = (index, options, next) ->
 
     fs.writeFile path, content, (err) ->
         if err then console.log err
-        else next(path)
+        else next(path, index)
 
 
 
@@ -57,6 +58,8 @@ send_mail = (calendar_events) ->
         html        : 'Have a good day at work honey!\nLove, \nHusband'
         attachments : calendar_events
 
+    ###
+
     transport.sendMail options, (err, response) ->
         if err then console.log err
         else
@@ -65,6 +68,9 @@ send_mail = (calendar_events) ->
                 fs.unlink event.filePath, (err) ->
                     if err then console.log err
                     else console.log 'file deleted'
+
+    ###
+    
 
 console.log "listening on #{port} in #{env} environment"
 app.listen port

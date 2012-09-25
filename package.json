@@ -1,0 +1,15 @@
+{
+  "name" : "AddToCalendar",
+  "version": "0.0.1",
+  "engines": {
+    "node": "0.9.x"
+  },
+  "dependencies": {
+    "express": "v3.0.0rc4",
+    "coffee-script" :"v1.3.3",
+    "nodemailer": "v0.3.28"
+  },
+  "scripts": {
+    "start": "runner.js"
+  }
+}

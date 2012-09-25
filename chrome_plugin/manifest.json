@@ -1,21 +1,17 @@
 {
-  "name": "Add to Calendar",
-  "version": "1.0",
-  "manifest_version": 2,
-  "description": "Add to Calendar - OptiLink Plugin",
-  "browser_action": 
-  {
-    "default_icon": "icon.png"
-  },
-  "background": {
-    "scripts": ["jquery-1.8.2.min.js", "main.js"]
-  },
-  "content_scripts": 
-   [{
-    "matches": ["<all_urls>"],
-    "js": ["content_script.js"]
-   }],
-  "permissions": [
-    "tabs", "http://*/*"
-  ]
+    "name"              : "Add2Cal",
+    "version"           : "0.1",
+    "manifest_version"  : 2,
+    "description"       : "Add2Cal - Currently only optimized for the OptiLink scheduling system",
+    "browser_action"    : {
+        "default_icon"  : "icon.png"
+    },
+    "background"        : {
+        "scripts"       : ["jquery-1.8.2.min.js", "main.js"]
+    },
+    "content_scripts"   : [{
+        "matches"       : ["<all_urls>"],
+        "js"            : ["content_script.js"]
+    }],
+    "permissions"       : ["tabs", "http://*/*"]
 }

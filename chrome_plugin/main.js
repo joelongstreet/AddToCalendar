@@ -6,7 +6,6 @@ $(function(){
             schedule         = []
 
 
-
             //Get DOM ready to be ravaged
             $dom            = $(response.dom);
             $table_body     = $dom.find('.qaMyScheduleGrid').find('.x-grid3-scroller').find('table');
@@ -89,10 +88,10 @@ $(function(){
                 contentType : "application/json; charset=utf-8",
                 data        : JSON.stringify(schedule),
                 success     : function(msg){
-                    console.log(msg)
+                    alert('Calendar Invitations Sent!')
                 },
                 error       : function(err){
-                    console.log(err);
+                    alert('There was an Error :(');
                 }
             });
 

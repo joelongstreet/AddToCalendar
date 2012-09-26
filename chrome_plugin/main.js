@@ -62,17 +62,17 @@ $(function(){
                     var time = $(this).text().split(':');
                     element_id = $(this).attr('id');
 
-                    chrome.tabs.sendRequest(tab.id, {action: "simulate_hover", el_id : element_id }, function(response){
+                    chrome.tabs.sendRequest(tab.id, {action: "simulate_hover", el_id : element_id, date : date}, function(response){
 
                         new_event = {
-                            "start_time"    : date + response.start_time + '00Z',
-                            "end_time"      : date + response.end_time + '00Z',
+                            "start_time"    : response.date + response.start_time + '00Z',
+                            "end_time"      : response.date + response.end_time + '00Z',
                             "description"   : response.name,
                             "summary"       : "Meeting",
                             "location"      : "Children\'s Mercy Hospital"
                         }
-                        console.log(new_event);
                         schedule.push(new_event);
+
                     });
 
                 } else if($(this).hasClass('indirect')){
@@ -80,37 +80,39 @@ $(function(){
                     var time = $(this).text().split(':');
                     element_id = $(this).attr('id');
 
-                    chrome.tabs.sendRequest(tab.id, {action: "simulate_hover", el_id : element_id }, function(response){
+                    chrome.tabs.sendRequest(tab.id, {action: "simulate_hover", el_id : element_id, date : date}, function(response){
 
+                        
                         new_event = {
-                            "start_time"    : date + response.start_time + '00Z',
-                            "end_time"      : date + response.end_time + '00Z',
+                            "start_time"    : response.date + response.start_time + '00Z',
+                            "end_time"      : response.date + response.end_time + '00Z',
                             "description"   : response.name,
                             "summary"       : "Professional Day",
                             "location"      : "Children\'s Mercy Hospital"
                         }
 
-                        console.log(new_event);
                         schedule.push(new_event);
+
                     });
                 }
             });
 
-
-
-            $.ajax({
-                type        : 'POST',
-                url         : 'http://joe.local:3001/',
-                dataType    : 'json',
-                contentType : "application/json; charset=utf-8",
-                data        : JSON.stringify(schedule),
-                success     : function(msg){
-                    alert('Calendar Invitations Sent!')
-                },
-                error       : function(err){
-                    alert('There was an Error :(');
-                }
-            });
+    
+            setTimeout(function(){
+                $.ajax({
+                    type        : 'POST',
+                    url         : 'http://joe.local:3001/',
+                    dataType    : 'json',
+                    contentType : "application/json; charset=utf-8",
+                    data        : JSON.stringify(schedule),
+                    success     : function(msg){
+                        alert('Calendar Invitations Sent!')
+                    },
+                    error       : function(err){
+                        alert('There was an Error :(');
+                    }
+                });
+            }, 2000);
 
 
         });

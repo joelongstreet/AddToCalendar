@@ -3,39 +3,47 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse){
         sendResponse({dom: document.body.innerHTML});
     } else if (request.action == 'simulate_hover'){
 
-        var evt = document.createEvent('MouseEvents');
-        evt.initMouseEvent('mouseover', true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
+        var mouseover = document.createEvent('MouseEvents');
+        var mouseout  = document.createEvent('MouseEvents');
+        mouseover.initMouseEvent('mouseover', true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
+        mouseout.initMouseEvent('mouseout', true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
 
         var cb = document.getElementById(request.el_id)
-        cb.dispatchEvent(evt);
+        cb.dispatchEvent(mouseover);
 
-        setTimeout(function(){
-            tips        = document.getElementsByClassName('x-tip');
-            body        = tips[tips.length - 1].getElementsByClassName('x-tip-body')[0];
-            list        = body.getElementsByTagName('li');
+        tips        = document.getElementsByClassName('x-tip');
+        tip         = null
 
-            event_name  = list[1].innerText;
-            date_string = list[0].innerText;
-            
-            splits      = date_string.split(':');
-            start_hr    = splits[0].charAt(splits[0].length - 2) + splits[0].charAt(splits[0].length - 1);
-            start_min   = splits[1].charAt(0) + splits[1].charAt(1);
-            start_time  = start_hr + start_min;
-            console.log(start_time);
-            end_hr      = splits[1].charAt(splits[1].length - 2) + splits[1].charAt(splits[1].length - 1);
-            end_min     = splits[2].charAt(0) + splits[2].charAt(1);
-            end_time    = end_hr + end_min;
-            console.log(end_time);
+        for(var i = 0; i < tips.length; i++) {
+            if(tips[i].style.display != 'none') {
+                tip = tips[i]
+            }
+        }
 
-            console.log('-------------');
+        body        = tip.getElementsByClassName('x-tip-body')[0];
+        list        = body.getElementsByTagName('li');
 
-            sendResponse({
-                "start_time"    : start_time,
-                "end_time"      : end_time,
-                "name"          : event_name
-            });
+        event_name  = list[1].innerText;
+        date_string = list[0].innerText;
+        
+        splits      = date_string.split(':');
+        start_hr    = splits[0].charAt(splits[0].length - 2) + splits[0].charAt(splits[0].length - 1);
+        start_min   = splits[1].charAt(0) + splits[1].charAt(1);
+        start_time  = start_hr + start_min;
+        end_hr      = splits[1].charAt(splits[1].length - 2) + splits[1].charAt(splits[1].length - 1);
+        end_min     = splits[2].charAt(0) + splits[2].charAt(1);
+        end_time    = end_hr + end_min;
 
-        }, 50);
+        cb.dispatchEvent(mouseout);
+
+        obj = {
+            "start_time"    : start_time,
+            "end_time"      : end_time,
+            "name"          : event_name,
+            "date"          : request.date
+        }
+
+        sendResponse(obj);
 
     } else{
         sendResponse({});

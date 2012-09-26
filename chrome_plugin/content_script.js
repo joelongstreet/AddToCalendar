@@ -23,7 +23,12 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse){
         body        = tip.getElementsByClassName('x-tip-body')[0];
         list        = body.getElementsByTagName('li');
 
-        event_name  = list[1].innerText;
+        if(list[1]){
+            event_name = list[1].innerText;
+        } else{
+            event_name = 'Work Day';
+        }
+
         date_string = list[0].innerText;
         
         splits      = date_string.split(':');
@@ -40,7 +45,8 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse){
             "start_time"    : start_time,
             "end_time"      : end_time,
             "name"          : event_name,
-            "date"          : request.date
+            "date"          : request.date,
+            "summary"       : request.summary
         }
 
         sendResponse(obj);

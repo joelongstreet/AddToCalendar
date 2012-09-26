@@ -46,49 +46,28 @@ $(function(){
                 // DTO - Day Trade Off - Blue
                 // overload-shading - Meeting - Red
                 // indirect - Professional Day - Pink
-                if($(this).text() == 'A' || $(this).text() == 'AP'){
-                    new_event = {
-                        "start_time"    : date + '123000Z',
-                        "end_time"      : date + '243000Z',
-                        "description"   : "Work Day",
-                        "summary"       : "Work Day",
-                        "location"      : "Children\'s Mercy Hospital"
-                    }
-                    schedule.push(new_event);
-                } else if($(this).text() == 'DTO'){
-                    //console.log('new day trade off');
-                } else if($(this).hasClass('overload-shading')){
 
-                    var time = $(this).text().split(':');
-                    element_id = $(this).attr('id');
 
-                    chrome.tabs.sendRequest(tab.id, {action: "simulate_hover", el_id : element_id, date : date}, function(response){
-
-                        new_event = {
-                            "start_time"    : response.date + response.start_time + '00Z',
-                            "end_time"      : response.date + response.end_time + '00Z',
-                            "description"   : response.name,
-                            "summary"       : "Meeting",
-                            "location"      : "Children\'s Mercy Hospital"
-                        }
-                        schedule.push(new_event);
-
-                    });
-
+                if($(this).hasClass('overload-shading')){
+                    summary = 'Meeting';
                 } else if($(this).hasClass('indirect')){
+                    summary = 'Professional Day'
+                } else {
+                    summary = 'Work Day';
+                }
+                element_id  = $(this).attr('id');
+                txt         = $(this).text();
 
-                    var time = $(this).text().split(':');
-                    element_id = $(this).attr('id');
+                if(txt == 'A' || txt == 'AP' || $(this).hasClass('overload-shading') || $(this).hasClass('indirect')){
 
-                    chrome.tabs.sendRequest(tab.id, {action: "simulate_hover", el_id : element_id, date : date}, function(response){
+                    chrome.tabs.sendRequest(tab.id, {action: "simulate_hover", el_id : element_id, date : date, summary : summary}, function(response){
 
-                        
                         new_event = {
-                            "start_time"    : response.date + response.start_time + '00Z',
-                            "end_time"      : response.date + response.end_time + '00Z',
+                            "start_time"    : response.date + response.start_time + '00',
+                            "end_time"      : response.date + response.end_time + '00',
                             "description"   : response.name,
-                            "summary"       : "Professional Day",
-                            "location"      : "Children\'s Mercy Hospital"
+                            "location"      : "Children\'s Mercy Hospital",
+                            "summary"       : response.summary
                         }
 
                         schedule.push(new_event);

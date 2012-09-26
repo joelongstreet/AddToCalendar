@@ -6,7 +6,7 @@ $(function(){
             schedule         = []
 
 
-            //Get DOM ready to be ravaged
+            //Get DOM ready to be RAVAGED
             $dom            = $(response.dom);
             $table_body     = $dom.find('.qaMyScheduleGrid').find('.x-grid3-scroller').find('table');
             $table_header   = $dom.find('.qaMyScheduleGrid').find('.x-grid3-header').find('table');
@@ -22,8 +22,8 @@ $(function(){
             base_day        = split[1];
             base_year       = '20' + split[2];
 
-            console.log('base month:' + base_month)
             
+
             $.each($table_body.find('td'), function(i, val){
 
 
@@ -37,16 +37,15 @@ $(function(){
                 }
 
                 if(month < 10){ month = '0' + parseFloat(month); }
-                if(day < 10) { day = '0' + day; }
+                if(day < 10) { day = '0' + parseFloat(day); }
 
                 date = base_year + month + day + 'T'
 
-
                 // Figure out which kind of event to make
-                // A or AP - is a new regular AM work day
-                // DTO - Day Trade Off
-                // overload-shading - Meeting
-                // indirect - Professional Day
+                // A or AP - is a new regular AM work day - Grey
+                // DTO - Day Trade Off - Blue
+                // overload-shading - Meeting - Red
+                // indirect - Professional Day - Pink
                 if($(this).text() == 'A' || $(this).text() == 'AP'){
                     new_event = {
                         "start_time"    : date + '123000Z',
@@ -59,23 +58,41 @@ $(function(){
                 } else if($(this).text() == 'DTO'){
                     //console.log('new day trade off');
                 } else if($(this).hasClass('overload-shading')){
-                    new_event = {
-                        "start_time"    : date + '000000Z',
-                        "end_time"      : date + '235900Z',
-                        "description"   : "Meeting",
-                        "summary"       : "Meeting",
-                        "location"      : "Children\'s Mercy Hospital"
-                    }
-                    schedule.push(new_event);
+
+                    var time = $(this).text().split(':');
+                    element_id = $(this).attr('id');
+
+                    chrome.tabs.sendRequest(tab.id, {action: "simulate_hover", el_id : element_id }, function(response){
+
+                        new_event = {
+                            "start_time"    : date + response.start_time + '00Z',
+                            "end_time"      : date + response.end_time + '00Z',
+                            "description"   : response.name,
+                            "summary"       : "Meeting",
+                            "location"      : "Children\'s Mercy Hospital"
+                        }
+                        console.log(new_event);
+                        schedule.push(new_event);
+                    });
+
                 } else if($(this).hasClass('indirect')){
-                    new_event = {
-                        "start_time"    : date + '000000Z',
-                        "end_time"      : date + '235900Z',
-                        "description"   : "Professional Day",
-                        "summary"       : "Professional Day",
-                        "location"      : "Children\'s Mercy Hospital"
-                    }
-                    schedule.push(new_event);
+
+                    var time = $(this).text().split(':');
+                    element_id = $(this).attr('id');
+
+                    chrome.tabs.sendRequest(tab.id, {action: "simulate_hover", el_id : element_id }, function(response){
+
+                        new_event = {
+                            "start_time"    : date + response.start_time + '00Z',
+                            "end_time"      : date + response.end_time + '00Z',
+                            "description"   : response.name,
+                            "summary"       : "Professional Day",
+                            "location"      : "Children\'s Mercy Hospital"
+                        }
+
+                        console.log(new_event);
+                        schedule.push(new_event);
+                    });
                 }
             });
 

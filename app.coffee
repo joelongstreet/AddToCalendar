@@ -28,7 +28,7 @@ app.post '/', (req, res) ->
             files.push
                 filePath : file_path
 
-            if files.length == req.body.length - 1
+            if files.length == req.body.length
                 send_mail(files)
 
 
@@ -54,7 +54,7 @@ send_mail = (calendar_events) ->
 
     options         =
         from        : 'Joe Longstreet <joelongstreet@gmail.com>'
-        to          : 'jordahlm@gmail.com'
+        to          : 'joelongstreet@gmail.com'
         subject     : 'Work Schedule'
         text        : 'Have a good day at work honey!\nLove, \nHusband'
         html        : 'Have a good day at work honey!\nLove, \nHusband'

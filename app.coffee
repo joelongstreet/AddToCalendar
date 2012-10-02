@@ -4,7 +4,7 @@ fs          = require 'fs'
 url         = require 'url'
 app         = express()
 port        = process.env.PORT || 3001
-env         = process.env.environment || 'development'
+env         = process.env.NODE_ENV || 'development'
 
 app.use express.bodyParser()
 
@@ -39,7 +39,7 @@ create_file = (index, options, next) ->
     if !options.summary then options.summary = 'Summary'
     if !options.location then options.location = 'Work'
 
-    content = "BEGIN:VCALENDAR\nVERSION:2.0\nCALSCALE:GREGORIAN\nBEGIN:VEVENT\nDTSTART:#{options.start_time}\nDTEND:#{options.end_time}\nDESCRIPTION:#{options.description}\nLOCATION:#{options.location}\nSUMMARY:#{options.summary}\nEND:VEVENT\nEND:VCALENDAR"
+    content = "BEGIN:VCALENDAR\nVERSION:2.0\nCALSCALE:GREGORIAN\nMETHOD:REQUEST\nSTATUS:CONFIRMED\nBEGIN:VEVENT\nDTSTART:#{options.start_time}\nDTEND:#{options.end_time}\nDESCRIPTION:#{options.description}\nLOCATION:#{options.location}\nSUMMARY:#{options.summary}\nEND:VEVENT\nEND:VCALENDAR"
     date    = new Date().getTime()
     file    = "#{index}_#{date}.ics"
     path    = "#{__dirname}/tmp/#{file}"
@@ -54,7 +54,7 @@ send_mail = (calendar_events) ->
 
     options         =
         from        : 'Joe Longstreet <joelongstreet@gmail.com>'
-        to          : 'joelongstreet@gmail.com'
+        to          : 'jordahlm@gmail.com'
         subject     : 'Work Schedule'
         text        : 'Have a good day at work honey!\nLove, \nHusband'
         html        : 'Have a good day at work honey!\nLove, \nHusband'

@@ -80,7 +80,7 @@ $(function(){
             setTimeout(function(){
                 $.ajax({
                     type        : 'POST',
-                    url         : 'http://joe.local:3001/',
+                    url         : 'http://addtocalendar.jit.su/',
                     dataType    : 'json',
                     contentType : "application/json; charset=utf-8",
                     data        : JSON.stringify(schedule),

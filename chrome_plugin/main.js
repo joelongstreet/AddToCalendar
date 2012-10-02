@@ -85,7 +85,9 @@ $(function(){
                     contentType : "application/json; charset=utf-8",
                     data        : JSON.stringify(schedule),
                     success     : function(msg){
-                        alert('Calendar Invitations Sent!')
+                        chrome.tabs.sendRequest(tab.id, {action: "complete"}, function(response){
+
+                        });
                     },
                     error       : function(err){
                         alert('There was an Error :(');

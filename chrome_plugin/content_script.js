@@ -1,5 +1,17 @@
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse){
     if (request.action == "getDOM") {
+        div                         = document.createElement('div');
+        div.style.width             = '60%';
+        div.style.height            = '60%';
+        div.style.backgroundColor   = 'rgba(255,255,255,.9)';
+        div.style.position          = 'absolute';
+        div.style.textAlign         = 'center';
+        div.style.fontWeight        = 'bold';
+        div.style.padding           = '20%';
+        div.style.fontSize          = '80px';
+        div.innerHTML               = 'Sending Calendar Invites...';
+        div.setAttribute('id', 'add_to_cal_overlay');
+        document.body.appendChild(div);
         sendResponse({dom: document.body.innerHTML});
     } else if (request.action == 'simulate_hover'){
 
@@ -51,6 +63,10 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse){
 
         sendResponse(obj);
 
+    } else if(request.action == 'complete'){
+        var el = document.getElementById('add_to_cal_overlay')
+        document.body.removeChild(el);
+        sendResponse({});
     } else{
         sendResponse({});
     }

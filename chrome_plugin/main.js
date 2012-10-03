@@ -1,5 +1,13 @@
+function checkForValidUrl(tabId, changeInfo, tab) {
+  if (tab.url.indexOf('optilink.cmh.edu') > -1) {
+    chrome.pageAction.show(tabId);
+  }
+};
+
+chrome.tabs.onUpdated.addListener(checkForValidUrl);
+
 $(function(){
-    chrome.browserAction.onClicked.addListener(function(tab) {
+    chrome.pageAction.onClicked.addListener(function(tab) {
         chrome.tabs.sendRequest(tab.id, {action: "getDOM"}, function(response){
 
 

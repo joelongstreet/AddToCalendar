@@ -21,15 +21,15 @@ app.post '/', (req, res) ->
 
     res.send({'complete' : true})
 
-    for item in req.body
+    for item in req.body.schedule
 
         create_file _i, item, (file_path, index) ->
 
             files.push
                 filePath : file_path
 
-            if files.length == req.body.length
-                send_mail(files)
+            if files.length == req.body.schedule.length
+                send_mail(files, req.body.email)
 
 
 
@@ -50,11 +50,11 @@ create_file = (index, options, next) ->
 
 
 
-send_mail = (calendar_events) ->
+send_mail = (calendar_events, email) ->
 
     options         =
         from        : 'Joe Longstreet <joelongstreet@gmail.com>'
-        to          : 'jordahlm@gmail.com'
+        to          : email
         subject     : 'Work Schedule'
         text        : 'Have a good day at work honey!\nLove, \nHusband'
         html        : 'Have a good day at work honey!\nLove, \nHusband'

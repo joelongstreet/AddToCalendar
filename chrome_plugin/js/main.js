@@ -92,15 +92,18 @@ $(function(){
 
         
                 setTimeout(function(){
+
+                    ajax_data = {
+                        email : localStorage.email,
+                        schedule : schedule
+                    }
+
                     $.ajax({
                         type        : 'POST',
                         url         : 'http://addtocalendar.jit.su/',
                         dataType    : 'json',
                         contentType : "application/json; charset=utf-8",
-                        data        : {
-                            email       : localStorage.email,
-                            schedule    : JSON.stringify(schedule)
-                        },
+                        data        : JSON.stringify(ajax_data),
                         success     : function(msg){
                             chrome.tabs.sendRequest(tab.id, {action: "complete"}, function(response){
 

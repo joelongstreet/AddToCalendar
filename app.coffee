@@ -60,7 +60,7 @@ send_mail = (calendar_events, email) ->
         html        : 'Have a good day at work honey!\nLove, \nHusband'
         attachments : calendar_events
 
-
+    ###
     transport.sendMail options, (err, response) ->
         if err then console.log err
         else
@@ -69,6 +69,7 @@ send_mail = (calendar_events, email) ->
                 fs.unlink event.filePath, (err) ->
                     if err then console.log err
                     else console.log 'file deleted'
+    ###
 
 
 console.log "listening on #{port} in #{env} environment"

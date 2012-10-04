@@ -54,7 +54,7 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse){
         date_regex  = /\d{2}\/\d{2}\/\d{2}/;
         date_arr    = date_regex.exec(date_string)[0].split('/');
         date        = '20' + date_arr[2] + date_arr[0] + date_arr[1];
-
+        console.log(date);
         cb.dispatchEvent(mouseout);
 
         obj = {

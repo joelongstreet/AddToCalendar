@@ -51,8 +51,8 @@ $(function(){
                         chrome.tabs.sendRequest(tab.id, {action: "simulate_hover", el_id : element_id, summary : summary}, function(response){
 
                             new_event = {
-                                "start_time"    : response.date + response.start_time + '00',
-                                "end_time"      : response.date + response.end_time + '00',
+                                "start_time"    : response.date + 'T' + response.start_time + '00',
+                                "end_time"      : response.date + 'T' + response.end_time + '00',
                                 "description"   : response.name,
                                 "location"      : "Children\'s Mercy Hospital",
                                 "summary"       : response.summary
@@ -75,6 +75,7 @@ $(function(){
                     $.ajax({
                         type        : 'POST',
                         url         : 'http://addtocalendar.jit.su/',
+                        //url         : 'http://joe.local:3001/',
                         dataType    : 'json',
                         contentType : "application/json; charset=utf-8",
                         data        : JSON.stringify(ajax_data),

@@ -51,13 +51,17 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse){
         end_min     = splits[2].charAt(0) + splits[2].charAt(1);
         end_time    = end_hr + end_min;
 
+        date_regex  = /\d{2}\/\d{2}\/\d{2}/;
+        date_arr    = date_regex.exec(date_string)[0].split('/');
+        date        = '20' + date_arr[2] + date_arr[0] + date_arr[1];
+
         cb.dispatchEvent(mouseout);
 
         obj = {
+            "date"          : date,
             "start_time"    : start_time,
             "end_time"      : end_time,
             "name"          : event_name,
-            "date"          : request.date,
             "summary"       : request.summary
         }
 

@@ -15,6 +15,20 @@ transport   = email.createTransport('SMTP',
         pass    : process.env.GOOGLE_PASS
 )
 
+
+# POST is expecting an object that looks
+# something like : 
+# {
+#   email       : "email@email.com"
+#   schedule    : {
+#       "start_time"    : 20121010T070000
+#       "end_time"      : 20121010T140000
+#       "description"   : "..."
+#       "location"      : "..."
+#       "summary"       : "..."
+#   }
+# }
+
 app.post '/', (req, res) ->
     
     files = []
@@ -60,7 +74,7 @@ send_mail = (calendar_events, email) ->
         html        : 'Have a good day at work honey!\nLove, \nHusband'
         attachments : calendar_events
 
-    ###
+
     transport.sendMail options, (err, response) ->
         if err then console.log err
         else
@@ -69,7 +83,6 @@ send_mail = (calendar_events, email) ->
                 fs.unlink event.filePath, (err) ->
                     if err then console.log err
                     else console.log 'file deleted'
-    ###
 
 
 console.log "listening on #{port} in #{env} environment"

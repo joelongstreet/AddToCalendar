@@ -10,31 +10,30 @@ $(function(){
     chrome.pageAction.onClicked.addListener(function(tab) {
 
         if(localStorage.email == undefined || localStorage.email == ''){
+
+            // If a user has not yet put in their e-mail address
             chrome.tabs.create({
                 url : '/html/options.html'
             });
+            // End - Email Request
+
         } else{
+
             chrome.tabs.sendRequest(tab.id, {action: "getDOM"}, function(response){
 
-
-                schedule         = []
-
-
-                //Get DOM ready to be RAVAGED
+                //Get DOM ready to be ABSOLUTELY RAVAGED
+                schedule        = []
                 $dom            = $(response.dom);
                 $table_body     = $dom.find('.qaMyScheduleGrid').find('.x-grid3-scroller').find('table');
                 $table_header   = $dom.find('.qaMyScheduleGrid').find('.x-grid3-header').find('table');
 
-
                 $.each($table_body.find('td'), function(i, val){
 
-
                     // Figure out which kind of event to make
-                    // A or AP - is a new regular AM work day - Grey
-                    // DTO - Day Trade Off - Blue
-                    // overload-shading - Meeting - Red
-                    // indirect - Professional Day - Pink
-
+                    // A, AP, $A : new regular AM work day : Grey : Creates new Work Day Devent
+                    // DTO : Day Trade Off : Blue : Creates Nothing
+                    // overload-shading : Meeting : Red : Creates new Meeting
+                    // indirect : Professional Day : Pink : Creates new Professional Day
 
                     if($(this).hasClass('overload-shading')){
                         summary = 'Meeting';
@@ -46,7 +45,7 @@ $(function(){
                     element_id  = $(this).attr('id');
                     txt         = $(this).text();
 
-                    if(txt == 'A' || txt == 'AP' || $(this).hasClass('overload-shading') || $(this).hasClass('indirect')){
+                    if(txt == 'A' || txt == 'AP' || text == '$A' || $(this).hasClass('overload-shading') || $(this).hasClass('indirect')){
 
                         chrome.tabs.sendRequest(tab.id, {action: "simulate_hover", el_id : element_id, summary : summary}, function(response){
 
@@ -64,12 +63,12 @@ $(function(){
                     }
                 });
 
-        
+                // Just wait a darn second, let the dom finish parsing
                 setTimeout(function(){
 
                     ajax_data = {
-                        email : localStorage.email,
-                        schedule : schedule
+                        email       : localStorage.email,
+                        schedule    : schedule
                     }
 
                     $.ajax({
@@ -81,7 +80,7 @@ $(function(){
                         data        : JSON.stringify(ajax_data),
                         success     : function(msg){
                             chrome.tabs.sendRequest(tab.id, {action: "complete"}, function(response){
-
+                                console.log(msg);
                             });
                         },
                         error       : function(err){
@@ -89,8 +88,6 @@ $(function(){
                         }
                     });
                 }, 2000);
-
-
             });
         }
     });

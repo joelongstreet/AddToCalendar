@@ -1,5 +1,8 @@
 chrome.extension.onRequest.addListener(function(request, sender, sendResponse){
+
     if (request.action == "getDOM") {
+
+        // Create the Overlay to make the user wait
         div                         = document.createElement('div');
         div.style.width             = '60%';
         div.style.height            = '60%';
@@ -13,8 +16,12 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse){
         div.setAttribute('id', 'add_to_cal_overlay');
         document.body.appendChild(div);
         sendResponse({dom: document.body.innerHTML});
+        // End Overlay Creation
+
+
     } else if (request.action == 'simulate_hover'){
 
+        // Simulate a Mouse Over Event
         var mouseover = document.createEvent('MouseEvents');
         var mouseout  = document.createEvent('MouseEvents');
         mouseover.initMouseEvent('mouseover', true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
@@ -22,7 +29,10 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse){
 
         var cb = document.getElementById(request.el_id)
         cb.dispatchEvent(mouseover);
+        // End Event Simulation
 
+
+        // Get The Tooltop and start picking at it
         tips        = document.getElementsByClassName('x-tip');
         tip         = null
 
@@ -40,7 +50,10 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse){
         } else{
             event_name = 'Work Day';
         }
+        // End Ass picking
 
+
+        // Date and Time Formatting
         date_string = list[0].innerText;
         
         splits      = date_string.split(':');
@@ -54,9 +67,15 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse){
         date_regex  = /\d{2}\/\d{2}\/\d{2}/;
         date_arr    = date_regex.exec(date_string)[0].split('/');
         date        = '20' + date_arr[2] + date_arr[0] + date_arr[1];
-        console.log(date);
-        cb.dispatchEvent(mouseout);
+        // End Date Formatting
 
+
+        // Close the Modal
+        cb.dispatchEvent(mouseout);
+        // End Close
+
+
+        // Build Object and Throw it back
         obj = {
             "date"          : date,
             "start_time"    : start_time,
@@ -66,12 +85,22 @@ chrome.extension.onRequest.addListener(function(request, sender, sendResponse){
         }
 
         sendResponse(obj);
+        // Brauuuughhhh.... ugh
+
 
     } else if(request.action == 'complete'){
+
+        // Remove the overlay
         var el = document.getElementById('add_to_cal_overlay')
         document.body.removeChild(el);
         sendResponse({});
+        // End Remove
+
     } else{
+
+        // Just handle anything else
         sendResponse({});
+        // End .. :)
+
     }
 });
